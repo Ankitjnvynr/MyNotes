@@ -1,5 +1,7 @@
 <?php
     $insert = NULL;
+    $update = NULL;
+
      $servername = "localhost";
      $username = "root";
      $password = "";    
@@ -18,11 +20,18 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if(isset($_POST['snoEdit'])){
             //updating the records
+            $snoEdit = $_POST['snoEdit'];
             $title = $_POST["titleEdit"];
             $description = $_POST["descriptionEdit"];
             
-            $sql ="INSERT INTO `notes` (`sr`, `title`, `description`, `dt`) VALUES (NULL, '$title', '$description', current_timestamp()); ";
+            $sql ="UPDATE `notes` SET `title`='$title',`description`='$description' WHERE `sr` = $snoEdit ";
             $result = mysqli_query($conn,$sql);
+            if($update){
+                // echo "inserterd";
+                $insert = true;
+            }else{
+                echo mysqli_error($conn);
+            }
             
             
 
@@ -31,7 +40,7 @@
             $title = $_POST["title"];
             $description = $_POST["description"];
             
-            $sql ="INSERT INTO `notes` (`sr`, `title`, `description`, `dt`) VALUES (NULL, '$title', '$description', current_timestamp()); ";
+            $sql ="INSERT INTO `notes` (`title`, `description`, `dt`) VALUES ('$title', '$description', current_timestamp()); ";
             $result = mysqli_query($conn,$sql);
 
             if($result){
@@ -161,6 +170,12 @@
         if($insert){
             echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
         <strong>Success!</strong> Your note added.
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>";
+        }
+        if($update){
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Success!</strong> Your note updated.
         <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
       </div>";
         }
